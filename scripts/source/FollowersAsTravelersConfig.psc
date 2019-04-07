@@ -20,12 +20,22 @@ Event OnVersionUpdate(int a_version)
 EndEvent
 
 Event OnConfigInit()
-	Pages = new string[5]
+	Pages = new string[9]
 	Pages[0] = "Config"
+	
 	Pages[1] = "1-24"
 	Pages[2] = "25-48"
 	Pages[3] = "49-72"
 	Pages[4] = "73-96"
+	Pages[5] = "97-120"
+	Pages[6] = "121-144"
+
+	Pages[7] = "1-24 Place"
+	Pages[8] = "25-48 Place"
+	Pages[9] = "49-72 Place"
+	Pages[10] = "73-96 Place"
+	Pages[11] = "97-120 Place"
+	Pages[12] = "121-144 Place"
 	
 	followersIDS = new int[24]
 EndEvent
@@ -39,26 +49,41 @@ Event OnPageReset(string page)
 		uninstallID = AddToggleOption("Stop/Uninstall", false)
 	else
 		PageIndex = Pages.Find(page) - 1
-		int flistidx = PageIndex * 24
+		int flistidx
+		if (PageIndex > 3) ; place page
+			flistidx = (PageIndex - 4) * 24
+		else
+			flistidx = PageIndex * 24
+		endif
 		
 		SetCursorFillMode(LEFT_TO_RIGHT)
 		SetCursorPosition(0)
 		
 		Actor act
+		string name
+		string place
+		
 		int i = 0
 		int n = flistidx
 		int max = n + 24
 		while n != max
 			act = FaTActorList.GetAt(n) as Actor
 			if (act)
-				int rank = act.GetFactionRank(FaTSearchedFaction)
-				if (rank == 0)
-					followersIDS[i] = AddToggleOption(act.GetLeveledActorBase().GetName(), false)
-				elseif (rank > 0)
-					followersIDS[i] = AddToggleOption(act.GetLeveledActorBase().GetName(), true)
+				name = act.GetLeveledActorBase().GetName()
+				
+				if (PageIndex > 3) ; place page
+					place = act.GetParentCell().GetName()
+					AddTextOption(name, place)
+				else
+					int rank = act.GetFactionRank(FaTSearchedFaction)
+					if (rank == 0)
+						followersIDS[i] = AddToggleOption(name, false)
+					elseif (rank > 0)
+						followersIDS[i] = AddToggleOption(name, true)
+					endif
 				endif
 			else
-				AddTextOption("REMOVED ACTOR, IGNORED", "")
+				AddTextOption("-", "")
 			endif
 			n += 1
 			i += 1
@@ -86,6 +111,8 @@ Event OnOptionSelect(int option)
 		elseif (rank > 0)
 			FaTScript.TravelStop(act, false)
 			SetToggleOptionValue(option, false)
+		else
+			debug.trace("[FaT] FactionRank " + rank)
 		endif
 	endif
 EndEvent

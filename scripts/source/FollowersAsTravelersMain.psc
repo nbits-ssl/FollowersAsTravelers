@@ -33,45 +33,47 @@ Function CleanAll()
 	Actor act
 	int n = FaTActorList.GetSize()
 	while n >= 0
-		act = FaTActorList.GetAt(n) as Actor
-		self.TravelStop(act, true)
 		n -= 1
+		act = FaTActorList.GetAt(n) as Actor
+		if (act)
+			self.TravelStop(act, true)
+		endif
 	endwhile
 	FaTActorList.Revert()
 	debug.notification("FaT: Completed")
 EndFunction
 
 Function TravelStart(Actor target)
-	if (FaTActorList.Find(target) != -1)
-		return ; fail safe
-	endif
+	string name = target.GetLeveledActorBase().GetName()
 	
 	target.AddToFaction(FaTSearchedFaction)
 	target.SetFactionRank(FaTSearchedFaction, 1)
 	ActorUtil.AddPackageOverride(target, FaTMultiLocTravelInnsAndJarls)
 	FaTActorList.AddForm(target)
-	debug.notification("FaT: " + target.GetLeveledActorBase().GetName() + " goes on a trip")
+	debug.notification("FaT: " + name + " goes on a trip")
 	
 	if (!target.IsEssential() && target.GetLeveledActorBase().IsUnique())
 		target.GetActorBase().SetEssential(true)
 		target.SetFactionRank(FaTSearchedFaction, 2)
-		debug.notification("FaT: " + target.GetLeveledActorBase().GetName() + " +Essential")
+		; debug.notification("FaT: " + name + " +Essential")
 	endif
 	
 	target.EvaluatePackage()
 EndFunction
 
 Function TravelStop(Actor target, bool _remove)
+	string name = target.GetLeveledActorBase().GetName()
+	
 	ActorUtil.RemovePackageOverride(target, FaTMultiLocTravelInnsAndJarls)
 	if (_remove)
-		debug.notification("FaT: " + target.GetLeveledActorBase().GetName() + "'s travel stoppped & removed")
+		debug.notification("FaT: " + name + "'s travel stoppped & removed")
 	else
-		debug.notification("FaT: " + target.GetLeveledActorBase().GetName() + "'s travel stoppped")
+		debug.notification("FaT: " + name + "'s travel stoppped")
 	endif
 	
 	if (target.GetFactionRank(FaTSearchedFaction) == 2)
 		target.GetActorBase().SetEssential(false)
-		debug.notification("FaT: " + target.GetLeveledActorBase().GetName() + " -Essential")
+		; debug.notification("FaT: " + target.GetLeveledActorBase().GetName() + " -Essential")
 	endif
 	if (_remove)
 		target.RemoveFromFaction(FaTSearchedFaction)
