@@ -39,6 +39,9 @@ Travel Mapを使う方法だとフォロワー以外の友好的なNPCにも旅�
 * MCMのチェックが外れていれば何もしないため、誤って捕捉されてしまったNPCや、旅に
   出てほしくないNPCはチェックを外してください
 
+* 強制力はとても弱いです。他のModの適用下にあるフォロワーや独自クエストで動きが管
+  理されているフォロワーは、枠には入っても作動はしないと思います。
+
 
 ## 既知の問題
 
@@ -49,6 +52,7 @@ Travel Mapを使う方法だとフォロワー以外の友好的なNPCにも旅�
 ## 必須
 
 * Skyrim OE
+* PapyrusUtil or SexLab
 
 
 ## 併用推奨
@@ -64,6 +68,7 @@ Travel Mapを使う方法だとフォロワー以外の友好的なNPCにも旅�
 ## 謝辞
 
 * Bethesda
+* Ashal @ Skyrim SexLab (or PapyrusUtil) & LoversLab
 * SLPackages by UNI @ 方向音痴のSkyrim
 
 
@@ -71,5 +76,5 @@ Travel Mapを使う方法だとフォロワー以外の友好的なNPCにも旅�
 
 ### 2019/**/**
 
-* 初版リリース
 * 初回リリース
+

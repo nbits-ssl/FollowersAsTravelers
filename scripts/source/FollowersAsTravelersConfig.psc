@@ -112,7 +112,7 @@ Event OnOptionSelect(int option)
 			FaTScript.TravelStop(act, false)
 			SetToggleOptionValue(option, false)
 		else
-			debug.trace("[FaT] FactionRank " + rank)
+			; debug.trace("[FaT] FactionRank " + rank)
 		endif
 	endif
 EndEvent
