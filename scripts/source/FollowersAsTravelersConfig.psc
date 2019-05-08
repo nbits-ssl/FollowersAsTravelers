@@ -7,20 +7,21 @@ int[] followersIDS
 int PageIndex
 
 int Function GetVersion()
-	return 20190303
+	return 20190509
 EndFunction 
 
 Event OnVersionUpdate(int a_version)
 	if (CurrentVersion == 0) ; new game
 		;
 	elseif (a_version != CurrentVersion)
+		debug.notification("Followers as Travelers updated to " + self.GetVersion())
 		OnConfigInit()
 		; MainQuest.Reboot()
 	endif
 EndEvent
 
 Event OnConfigInit()
-	Pages = new string[9]
+	Pages = new string[13]
 	Pages[0] = "Config"
 	
 	Pages[1] = "1-24"
@@ -50,8 +51,8 @@ Event OnPageReset(string page)
 	else
 		PageIndex = Pages.Find(page) - 1
 		int flistidx
-		if (PageIndex > 3) ; place page
-			flistidx = (PageIndex - 4) * 24
+		if (PageIndex > 5) ; place page
+			flistidx = (PageIndex - 6) * 24
 		else
 			flistidx = PageIndex * 24
 		endif
@@ -60,6 +61,7 @@ Event OnPageReset(string page)
 		SetCursorPosition(0)
 		
 		Actor act
+		Cell pcell
 		string name
 		string place
 		
@@ -72,7 +74,12 @@ Event OnPageReset(string page)
 				name = act.GetLeveledActorBase().GetName()
 				
 				if (PageIndex > 3) ; place page
-					place = act.GetParentCell().GetName()
+					pcell = act.GetParentCell()
+					if (pcell)
+						place = pcell.GetName()
+					else
+						place = ""
+					endif
 					AddTextOption(name, place)
 				else
 					int rank = act.GetFactionRank(FaTSearchedFaction)
